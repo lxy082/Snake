@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>贪吃蛇 · 静态版</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar card">
+        <h1>贪吃蛇</h1>
+        <div class="stats-grid">
+          <div>分数：<strong id="score">0</strong></div>
+          <div>最高分：<strong id="bestScore">0</strong></div>
+          <div>速度档位：<strong id="speedTier">4</strong></div>
+          <div>步进间隔：<strong id="stepMs">130</strong> ms</div>
+          <div>豆子模式：<strong id="beanModeText">单豆</strong></div>
+          <div>状态：<strong id="statusText">未开始</strong></div>
+        </div>
+      </header>
+
+      <section class="main-layout">
+        <div class="board card">
+          <canvas id="gameCanvas" width="600" height="600" aria-label="贪吃蛇画布"></canvas>
+          <div id="overlay" class="overlay show" aria-live="polite">
+            <div class="overlay-panel">
+              <h2 id="overlayTitle">准备开始</h2>
+              <p id="overlayMessage">点击开始游戏，或按空格开始。</p>
+              <button id="overlayBtn" class="btn btn-primary">开始游戏</button>
+            </div>
+          </div>
+        </div>
+
+        <aside id="sidebar" class="sidebar card">
+          <div class="sidebar-head">
+            <strong>功能与设置</strong>
+            <button id="closeSettingsBtn" class="btn btn-ghost" type="button">关闭</button>
+          </div>
+
+          <div class="actions">
+            <button id="startBtn" class="btn btn-primary">开始游戏</button>
+            <button id="pauseBtn" class="btn">暂停 / 继续</button>
+            <button id="restartBtn" class="btn">重新开始</button>
+          </div>
+
+          <details class="settings" open>
+            <summary>设置面板</summary>
+            <div class="settings-body">
+              <label>行数 rows（10-60）
+                <input id="rowsInput" type="number" min="10" max="60" value="20" />
+              </label>
+
+              <label>列数 cols（10-60）
+                <input id="colsInput" type="number" min="10" max="60" value="20" />
+              </label>
+
+              <label>速度档位（1-7）
+                <select id="speedTierSelect">
+                  <option value="1">1 - 极慢</option>
+                  <option value="2">2 - 慢</option>
+                  <option value="3">3 - 较慢</option>
+                  <option value="4" selected>4 - 中</option>
+                  <option value="5">5 - 较快</option>
+                  <option value="6">6 - 快</option>
+                  <option value="7">7 - 极快</option>
+                </select>
+              </label>
+
+              <label class="switch-row">
+                <input id="autoSpeedToggle" type="checkbox" checked />
+                自动提速（默认开启）
+              </label>
+
+              <label class="switch-row">
+                <input id="wallPassToggle" type="checkbox" />
+                穿墙模式（默认关闭）
+              </label>
+
+              <label>豆子模式
+                <select id="beanModeSelect">
+                  <option value="single" selected>单豆</option>
+                  <option value="multi">多豆</option>
+                </select>
+              </label>
+
+              <label id="beansCountLabel" class="hidden">多豆数量 beansCount（2-10）
+                <input id="beansCountInput" type="number" min="2" max="10" value="3" />
+              </label>
+
+              <button id="applySettingsBtn" class="btn">应用设置</button>
+              <small class="tip">规则：网格/豆子数量需重开生效；速度档位可立即生效（含运行中）。</small>
+            </div>
+          </details>
+
+          <section class="help">
+            <h3>操作说明</h3>
+            <ul>
+              <li>方向键 / WASD：移动</li>
+              <li>空格：暂停 / 继续</li>
+              <li>R：重新开始（回到未开始状态）</li>
+              <li>+ / =：提升速度档位（即时生效）</li>
+              <li>- / _：降低速度档位（即时生效）</li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+
+      <section class="mobile-controls" aria-label="移动方向控制">
+        <div class="mobile-actions">
+          <button id="mobileStartBtn" class="btn btn-primary" type="button">开始</button>
+          <button id="mobilePauseBtn" class="btn" type="button">暂停</button>
+          <button id="mobileRestartBtn" class="btn" type="button">重开</button>
+          <button id="mobileSettingsBtn" class="btn" type="button">设置</button>
+        </div>
+
+        <button class="dpad-btn" data-dir="up" aria-label="向上">↑</button>
+        <div class="mobile-row">
+          <button class="dpad-btn" data-dir="left" aria-label="向左">←</button>
+          <button class="dpad-btn" data-dir="down" aria-label="向下">↓</button>
+          <button class="dpad-btn" data-dir="right" aria-label="向右">→</button>
+        </div>
+      </section>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>
