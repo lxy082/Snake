@@ -1,22 +1,6 @@
-# 贪吃蛇（纯静态网页版）
+# 贪吃蛇（纯静态网页 / GitHub Pages 可直接部署）
 
-这是一个可直接部署到 **GitHub Pages** 的贪吃蛇小游戏项目，使用纯 **HTML + CSS + JavaScript** 编写，无需 Node/npm、无第三方库、无 CDN 依赖。
-
-## 功能特性
-
-- Canvas 网格渲染（可选 20x20 / 25x25）
-- 初始蛇长度为 3，默认向右移动
-- 吃到食物：长度 +1，分数 +10
-- 撞墙/撞自己判定 Game Over
-- 禁止 180° 掉头
-- 食物绝不生成在蛇身上
-- 难度递增：每 50 分提升速度（有上限）
-- 空格暂停/继续，R 重新开始
-- 支持方向键 + WASD
-- 支持移动端屏幕方向按钮
-- 显示分数、最高分（localStorage 持久化）、速度档位
-- 设置面板：网格大小、初始速度、穿墙模式
-- WebAudio 纯代码音效（吃食物 / Game Over）
+这是一个只使用 **HTML + CSS + JavaScript** 的贪吃蛇小游戏项目，无需 Node/npm、无打包工具、无 CDN 依赖。
 
 ## 项目结构
 
@@ -30,61 +14,71 @@
 
 ## 本地运行
 
-1. 克隆或下载本仓库。
-2. 在项目根目录执行：
+1. 进入项目根目录。
+2. 运行：
 
 ```bash
 python -m http.server 8000
 ```
 
-3. 浏览器访问：
+3. 浏览器打开：
 
 ```text
 http://localhost:8000
 ```
 
-## GitHub Pages 部署（Deploy from branch）
+## GitHub Pages 部署（main / root）
 
-本项目采用 **main 分支 / root** 方式部署。
+> 固定采用 **main 分支 + / (root)**。
 
-1. 将以上 4 个文件提交到 GitHub 仓库 `main` 分支根目录。
-2. 打开仓库页面，进入 `Settings` → `Pages`。
-3. 在 `Build and deployment` 中选择：
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-4. 保存后等待部署完成，访问生成的 Pages 链接即可。
+1. 将 `index.html`、`styles.css`、`main.js`、`README.md` 提交到仓库 `main` 分支根目录。
+2. 打开仓库 `Settings` → `Pages`。
+3. `Source` 选择 `Deploy from a branch`。
+4. `Branch` 选择 `main`，`Folder` 选择 `/ (root)`。
+5. 保存后等待部署完成，访问生成的 Pages 地址。
 
 ## 操作说明
 
-- **开始游戏**：点击“开始游戏”按钮（首次进入默认未开始）。
-- **移动**：方向键或 WASD。
-- **暂停/继续**：空格键。
-- **重新开始**：R 键或“重新开始”按钮。
-- **移动端**：点击屏幕下方方向按钮控制。
+- 方向键 / WASD：移动
+- 空格：暂停 / 继续
+- R：重新开始（回到未开始状态）
+- `+` / `=`：速度档位 +1（立刻生效）
+- `-` / `_`：速度档位 -1（立刻生效）
+- 移动端：页面底部方向按钮（上/下/左/右）
 
 ## 规则说明
 
-1. 蛇初始长度 3，头部位于棋盘中部，初始方向向右。
-2. 每吃到 1 个食物，蛇身 +1，分数 +10。
-3. 关闭穿墙模式时：撞墙即失败；开启时可从另一侧穿出。
-4. 任意模式下撞到自己都判定失败。
-5. 游戏进行中不可直接应用新设置；修改设置会提示“需重新开始生效”。
-6. 分数每达到 50 的倍数提升一次速度，且有最小步进间隔上限，保证可玩。
+1. 棋盘由 Canvas 网格渲染（非 div 网格）。
+2. 初始蛇长度为 3，初始方向向右，蛇头位于棋盘中部。
+3. 吃到豆子：蛇长 +1，分数 +10。
+4. 撞墙或撞自己：Game Over，显示覆盖层与“重新开始”。
+5. 禁止 180 度掉头。
+6. 豆子不会生成在蛇身上；多豆模式下也不会与其它豆子重叠。
+7. 速度支持“档位 + 自动提速”：
+   - 档位共 7 档
+   - 自动提速开启时，按分数每 50 分额外加速一次
+   - 自动提速关闭时，仅按档位速度运行
 
 ## 设置面板说明
 
-- **网格大小**：20x20 / 25x25
-- **初始速度**：慢 / 中 / 快
-- **穿墙模式**：开 / 关（默认关）
+- rows（10-60）/ cols（10-60）
+- 速度档位（1-7）
+- 自动提速开关
+- 穿墙模式开关（默认关）
+- 豆子模式（单豆 / 多豆）
+- beansCount（多豆时可设置，范围 2-10）
+- 应用设置按钮
 
-> 设置在未开始状态下可直接生效；游戏中修改会提示需重新开始。
+### 设置生效规则
 
-## 技术实现简述
+- **网格大小、豆子模式/数量、穿墙模式**：需要重新开始后生效。
+- **速度档位**：可立即生效（包括运行中）。
+- rows/cols/beansCount 超出范围会自动纠正并 toast 提示。
 
-- 使用 `requestAnimationFrame + accumulator(delta time)` 驱动循环
-- 明确状态机：`IDLE / RUNNING / PAUSED / GAME_OVER`
-- 核心函数：`resetGame`、`spawnFood`、`update`、`render`、`setSpeed`、`handleKeyDown`
-- 画布随容器自适应并按网格取整，减少模糊并兼容手机屏幕
+## 技术实现要点
 
-祝你玩得开心，欢迎继续扩展（例如关卡、主题皮肤、排行榜等）。
+- 使用 `requestAnimationFrame + accumulator` 实现稳定步进更新。
+- 状态机：`IDLE / RUNNING / PAUSED / GAME_OVER`。
+- 主要函数：`resetGame`、`applySettings`、`spawnBeans`、`spawnOneBean`、`update`、`render`、`handleKeyboard`、`handleTouch`、`setSpeedTier`、`togglePause`。
+- Canvas 按容器动态计算整数 `cellSize`，避免模糊并兼顾手机屏幕。
+- 使用 WebAudio API 实现轻量音效（吃豆、死亡、调速提示）。
