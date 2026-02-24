@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>贪吃蛇 · 静态版</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -32,7 +32,12 @@
           </div>
         </div>
 
-        <aside class="sidebar card">
+        <aside id="sidebar" class="sidebar card">
+          <div class="sidebar-head">
+            <strong>功能与设置</strong>
+            <button id="closeSettingsBtn" class="btn btn-ghost" type="button">关闭</button>
+          </div>
+
           <div class="actions">
             <button id="startBtn" class="btn btn-primary">开始游戏</button>
             <button id="pauseBtn" class="btn">暂停 / 继续</button>
@@ -102,11 +107,18 @@
       </section>
 
       <section class="mobile-controls" aria-label="移动方向控制">
-        <button data-dir="up" aria-label="向上">↑</button>
+        <div class="mobile-actions">
+          <button id="mobileStartBtn" class="btn btn-primary" type="button">开始</button>
+          <button id="mobilePauseBtn" class="btn" type="button">暂停</button>
+          <button id="mobileRestartBtn" class="btn" type="button">重开</button>
+          <button id="mobileSettingsBtn" class="btn" type="button">设置</button>
+        </div>
+
+        <button class="dpad-btn" data-dir="up" aria-label="向上">↑</button>
         <div class="mobile-row">
-          <button data-dir="left" aria-label="向左">←</button>
-          <button data-dir="down" aria-label="向下">↓</button>
-          <button data-dir="right" aria-label="向右">→</button>
+          <button class="dpad-btn" data-dir="left" aria-label="向左">←</button>
+          <button class="dpad-btn" data-dir="down" aria-label="向下">↓</button>
+          <button class="dpad-btn" data-dir="right" aria-label="向右">→</button>
         </div>
       </section>
 

@@ -42,6 +42,12 @@
 
   const toastEl = document.getElementById('toast');
   const mobileControls = document.querySelector('.mobile-controls');
+  const sidebar = document.getElementById('sidebar');
+  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+  const mobileStartBtn = document.getElementById('mobileStartBtn');
+  const mobilePauseBtn = document.getElementById('mobilePauseBtn');
+  const mobileRestartBtn = document.getElementById('mobileRestartBtn');
+  const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
 
   let state = GAME_STATE.IDLE;
   let rows = 20;
@@ -467,6 +473,7 @@
   function handleTouch(e) {
     const btn = e.target.closest('button[data-dir]');
     if (!btn) return;
+    if (e.type === 'touchstart') e.preventDefault();
     const dir = btn.dataset.dir;
     if (dir === 'up') changeDirection({ x: 0, y: -1 });
     if (dir === 'down') changeDirection({ x: 0, y: 1 });
@@ -475,13 +482,29 @@
     playTone(680, 0.03, 'square', 0.03);
   }
 
+
+  function toggleMobileSettings(open) {
+    if (window.innerWidth >= 768) return;
+    const shouldOpen = typeof open === 'boolean' ? open : !sidebar.classList.contains('mobile-open');
+    sidebar.classList.toggle('mobile-open', shouldOpen);
+    if (shouldOpen && state === GAME_STATE.RUNNING) {
+      togglePause();
+    }
+  }
+
   function initEvents() {
     startBtn.addEventListener('click', beginGame);
-    pauseBtn.addEventListener('click', () => {
+    mobileStartBtn.addEventListener('click', beginGame);
+
+    const pauseHandler = () => {
       if (state === GAME_STATE.IDLE) return;
       togglePause();
-    });
+    };
+    pauseBtn.addEventListener('click', pauseHandler);
+    mobilePauseBtn.addEventListener('click', pauseHandler);
+
     restartBtn.addEventListener('click', restartToIdle);
+    mobileRestartBtn.addEventListener('click', restartToIdle);
 
     overlayBtn.addEventListener('click', () => {
       if (state === GAME_STATE.PAUSED) togglePause();
@@ -501,9 +524,16 @@
       setSpeedTier(next, true);
     });
 
+    mobileSettingsBtn.addEventListener('click', () => toggleMobileSettings(true));
+    closeSettingsBtn.addEventListener('click', () => toggleMobileSettings(false));
+
     window.addEventListener('keydown', handleKeyboard);
-    window.addEventListener('resize', applyCanvasSize);
+    window.addEventListener('resize', () => {
+      applyCanvasSize();
+      if (window.innerWidth >= 768) sidebar.classList.remove('mobile-open');
+    });
     mobileControls.addEventListener('click', handleTouch);
+    mobileControls.addEventListener('touchstart', handleTouch, { passive: false });
   }
 
   function boot() {
