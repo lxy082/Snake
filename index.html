@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>贪吃蛇小游戏</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <h1>贪吃蛇</h1>
+        <div class="stats">
+          <span>分数：<strong id="score">0</strong></span>
+          <span>最高分：<strong id="bestScore">0</strong></span>
+          <span>速度档位：<strong id="speedLevel">1</strong></span>
+          <span>状态：<strong id="statusText">未开始</strong></span>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="board-card">
+          <canvas id="gameCanvas" width="500" height="500" aria-label="贪吃蛇游戏画布"></canvas>
+          <div id="overlay" class="overlay show" aria-live="polite">
+            <div class="overlay-panel">
+              <h2 id="overlayTitle">准备开始</h2>
+              <p id="overlayMessage">点击“开始游戏”后开始移动。</p>
+              <button id="overlayButton" class="btn">开始游戏</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <button id="startBtn" class="btn btn-primary">开始游戏</button>
+          <button id="pauseBtn" class="btn">暂停</button>
+          <button id="restartBtn" class="btn">重新开始</button>
+
+          <details class="settings" open>
+            <summary>设置</summary>
+            <div class="settings-body">
+              <label>
+                网格大小
+                <select id="gridSizeSelect">
+                  <option value="20">20 x 20</option>
+                  <option value="25">25 x 25</option>
+                </select>
+              </label>
+
+              <label>
+                初始速度
+                <select id="speedSelect">
+                  <option value="slow">慢</option>
+                  <option value="medium" selected>中</option>
+                  <option value="fast">快</option>
+                </select>
+              </label>
+
+              <label class="switch-row">
+                <input type="checkbox" id="wallModeToggle" />
+                开启穿墙模式
+              </label>
+              <small class="hint">游戏进行中修改设置将提示“需重新开始生效”。</small>
+            </div>
+          </details>
+
+          <section class="help">
+            <h3>操作说明</h3>
+            <ul>
+              <li>方向键 / WASD：移动</li>
+              <li>空格：暂停 / 继续</li>
+              <li>R：重新开始</li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+
+      <section class="mobile-controls" aria-label="移动端方向键">
+        <button data-dir="up" aria-label="向上">↑</button>
+        <div>
+          <button data-dir="left" aria-label="向左">←</button>
+          <button data-dir="down" aria-label="向下">↓</button>
+          <button data-dir="right" aria-label="向右">→</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>
